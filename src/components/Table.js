@@ -81,6 +81,7 @@ const Table = ({ columns, data }) => {
                   )}
                 </tbody>
               </table>
+              <div className="tc center pa4">
               <div className="pagination">
                 <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
                   {'<<'}
@@ -127,6 +128,7 @@ const Table = ({ columns, data }) => {
                 </div>
             </div>
               </div>
+          </div>
           </div>
         
         )
