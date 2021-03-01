@@ -10,7 +10,12 @@ export default class Form extends Component {
         firstName: '',
         lastName: '',
         email: '',
-        phone: ''
+        phone: '',
+        isIdCompleted: false,
+        isFirstNameCompleted: false,
+        isLastNameCompleted: false,
+        isEmailCompleted: false,
+        isPhoneCompleted: false,
       };
   
       this.handleInputChange = this.handleInputChange.bind(this);
@@ -51,54 +56,68 @@ export default class Form extends Component {
   
     render() {
       return (
-        !this.state.isPressed 
-        ? <button className="pa2 ba b--green" onClick = {() => this.setState({isPressed: true})}>Добавить</button> 
-        : <div className="ph4">
-            <div className="f6 w-100 mw8 center" cellSpacing="0">
-                <form className="tl">  
-                      <label className="f6 b db mt2">ID:</label>
+        <div className="tc flex justify-center">
+          {!this.state.isPressed 
+          ? <button className="mv3 bg-white ba ph3 pa3 dib br3 b--green" onClick = {() => this.setState({isPressed: true})}>Добавить пользователя в таблицу</button> 
+          : <div className="ph4">
+              <div className="f6 w-100 mw8 center" cellSpacing="0">
+                  <form className="tl flex pa3">
+                    <div className="w-10 mr2">
+                      <label className="f6 db">ID:</label>
                       <input
-                        className="input-reset"
+                        className="input-reset w-100 pa2 ba br2 b--green"
                         name="id"
                         type="text"
+                        placeholder="цифры"
                         value={this.state.id}
-                        onChange={this.handleInputChange} />                  
+                        onChange={this.handleInputChange} />    
+                    </div>
+                    <div className="w-20 mr2">
+                      <label className="f6 db">First Name:</label>                        
+                      <input
+                      className="input-reset w-100 pa2 ba br2 b--green"
+                      name="firstName"
+                      type="text"
+                      placeholder="латинские буквы"
+                      value={this.state.firstName}
+                      onChange={this.handleInputChange} /> 
+                    </div>
+                    <div className="w-20 mr2">
+                      <label className="ff6 db">Last Name:</label>
+                      <input
+                      className="input-reset w-100 pa2 ba br2 b--green"
+                      name="lastName"
+                      type="text"
+                      placeholder="латинские буквы"
+                      value={this.state.lastName}
+                      onChange={this.handleInputChange} />
+                    </div>
+                    <div className="w-30 mr2"> 
+                      <label className="ff6 db ">Email:</label>
+                      <input
+                      className="input-reset w-100 pa2 ba br2 b--green"
+                      name="email"
+                      type="email"
+                      placeholder="@"
+                      value={this.state.email}
+                      onChange={this.handleInputChange} />
+                    </div>
+                    <div className="w-20 mr2">
+                      <label className="ff6 db">Phone:</label>
+                      <input
+                      className="input-reset w-100 pa2 ba br2 b--green"
+                      name="phone"
+                      type="text"
+                      placeholder="(XXX) XXX-XXXX"
+                      value={this.state.phone}
+                      onChange={this.handleInputChange} />
+                    </div>                
 
-                        <label className="f6 b db mt2">First Name:</label>                        
-                        <input
-                        className="input-reset"
-                        name="firstName"
-                        type="text"
-                        value={this.state.firstName}
-                        onChange={this.handleInputChange} />
-                   
-                        <label className="f6 b db mt2">Last Name:</label>
-                        <input
-                        className="input-reset"
-                        name="lastName"
-                        type="text"
-                        value={this.state.lastName}
-                        onChange={this.handleInputChange} />
-   
-                        <label className="f6 b db mt2">Email:</label>
-                        <input
-                        className="input-reset"
-                        name="email"
-                        type="email"
-                        value={this.state.email}
-                        onChange={this.handleInputChange} />
-                 
-                        <label className="f6 b db mt2">Phone:</label>
-                        <input
-                        className="input-reset"
-                        name="phone"
-                        type="text"
-                        value={this.state.phone}
-                        onChange={this.handleInputChange} />                 
-
-                    <button className="f6 db pa2 ba mt2 b--green" onClick = {this.onSubmit}>Добавить</button>
-                </form>
-            </div>
+                    <button className="w-15 db bg-white ba br2 b--green" onClick = {this.onSubmit}>Добавить</button>
+                  </form>
+              </div>
+          </div>
+          }
         </div>
       );
     }

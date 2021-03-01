@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useTable, useSortBy, usePagination } from 'react-table';
+import Form from './Form';
 
 const Table = ({ columns, data }) => {
         // Use the state and functions returned from useTable to build your UI
@@ -43,7 +44,7 @@ const Table = ({ columns, data }) => {
         // Render the UI for your table
         return (
           <div className="ph4">
-            <div className="overflow-auto">              
+            <div className="overflow-auto">       
               <table className="f6 w-100 mw8 center bg-grey" cellSpacing="0" {...getTableProps()}>
                 <thead>
                   {headerGroups.map(headerGroup => (

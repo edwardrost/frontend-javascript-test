@@ -12,26 +12,21 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoaded: false,
-      minDataValue: true,
+      isLoaded: true,
+      minDataSet: true,
       robots: [],
       searchfield: "",
-      // line: '',
       error: false,
     };
     this.onUrlChange = this.onUrlChange.bind(this);
+    this.loadFromApi = this.loadFromApi.bind(this);
   }
 
-  onUrlChange (event) {	  
-    this.setState( state => ({ 
-		minDataValue: !state.minDataValue,
-    isLoaded: false 
-  }))}
-
-  loadFromApi(state){
-    let url = this.state.minDataValue
-      ? 'http://www.filltext.com/?rows=32&id=%7Bnumber%7C1000%7D&firstName=%7BfirstName%7D&lastName=%7BlastName%7D&email=%7Bemail%7D&phone=%7Bphone%7C(xxx)xxx-xx-xx%7D&address=%7BaddressObject%7D&description=%7Blorem%7C32%7D'
-      : 'http://www.filltext.com/?rows=1000&id=%7Bnumber%7C1000%7D&firstName=%7BfirstName%7D&delay=3&lastName=%7BlastName%7D&email=%7Bemail%7D&phone=%7Bphone%7C(xxx)xxx-xx-xx%7D&address=%7BaddressObject%7D&description=%7Blorem%7C32%7D';
+  loadFromApi(url) {
+    
+    this.setState({
+      isLoaded: false
+    })
 
     fetch(url)
       .then((response) => response.json())
@@ -39,15 +34,26 @@ class App extends Component {
         robots: users,
         isLoaded: true
        }))
-      .catch(this.onError);
+      .catch((e) => this.onError);
   };
 
   componentDidMount() {
-    this.loadFromApi();
+    let url = 'http://www.filltext.com/?rows=32&id=%7Bnumber%7C1000%7D&firstName=%7BfirstName%7D&lastName=%7BlastName%7D&email=%7Bemail%7D&phone=%7Bphone%7C(xxx)xxx-xx-xx%7D&address=%7BaddressObject%7D&description=%7Blorem%7C32%7D';
+    this.loadFromApi(url);
   }
 
-  componentDidUpdate() {
-    this.loadFromApi();
+  onUrlChange (e) {
+    console.log(this.state.minDataSet);
+    let url = !this.state.minDataSet
+      ? 'http://www.filltext.com/?rows=32&id=%7Bnumber%7C1000%7D&firstName=%7BfirstName%7D&lastName=%7BlastName%7D&email=%7Bemail%7D&phone=%7Bphone%7C(xxx)xxx-xx-xx%7D&address=%7BaddressObject%7D&description=%7Blorem%7C32%7D'
+      : 'http://www.filltext.com/?rows=1000&id=%7Bnumber%7C1000%7D&firstName=%7BfirstName%7D&delay=3&lastName=%7BlastName%7D&email=%7Bemail%7D&phone=%7Bphone%7C(xxx)xxx-xx-xx%7D&address=%7BaddressObject%7D&description=%7Blorem%7C32%7D';
+    
+    this.setState({
+      minDataValue: !this.state.minDataSet
+    })
+
+    this.loadFromApi(url);
+    console.log(this.state.minDataSet);
   }
 
   onSearchChange = (event) => {
@@ -57,6 +63,7 @@ class App extends Component {
   onError = () => {
     this.setState({
       error: true,
+      isLoaded: true
     });
   };
 
@@ -70,7 +77,9 @@ class App extends Component {
   };
 
   render() {
-    const { robots, searchfield, isLoaded, error } = this.state;
+    const { robots, searchfield, isLoaded, minDataSet, error } = this.state;
+
+    const buttonText = minDataSet ? 'Загрузить Большой набор данных' : 'Загрузить Малый набор данных';
 
     const filteredRobots = !searchfield
       ? robots
@@ -109,24 +118,28 @@ class App extends Component {
 
     return (
       <div className="center">
-        <h1 className="tc">Frontend-Javascript Test</h1>
-        <div className="flex justify-around">
-          <Menu
-            minDataValue={this.minDataValue}
-            urlChange={this.onUrlChange}
-          />
+        <h1 className="tc f1 lh-title">Frontend-Javascript Test</h1>
+        <div className="flex justify-center">
+          <button 
+            className="bg-white ba ph3 pv2 dib br3 b--green"
+            onClick={this.onUrlChange}>{buttonText}</button>
+         
           <SearchBox searchChange={this.onSearchChange} />
         </div>
-        {!isLoaded && !error &&
+       
+        {!isLoaded &&
           <Spinner />
         }
 
-        {isLoaded && error &&
+        {error && isLoaded &&
           <ErrorIndicator />
         }
 
-        {isLoaded && !error &&
-          <Table columns={columns} data={data} />
+        {isLoaded && 
+          <>
+            <Form addItem={this.addItem} />
+            <Table columns={columns} data={data} />
+          </>
         }
       </div>
     )
