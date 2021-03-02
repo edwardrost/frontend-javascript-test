@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Menu from './components/Menu';
 import SearchBox from './components/SearchBox';
 import Table from './components/Table';
 import Form from './components/Form';
@@ -19,7 +18,6 @@ class App extends Component {
       error: false,
     };
     this.onUrlChange = this.onUrlChange.bind(this);
-    this.loadFromApi = this.loadFromApi.bind(this);
   }
 
   loadFromApi(url) {
@@ -34,7 +32,14 @@ class App extends Component {
         robots: users,
         isLoaded: true
        }))
-      .catch((e) => this.onError);
+      .catch(e => {
+        console.log('Load Error');
+        this.setState({ 
+          robots: [],
+          error: true,
+          isLoaded: true
+         })
+      });
   };
 
   componentDidMount() {
@@ -56,13 +61,6 @@ class App extends Component {
 
   onSearchChange = (event) => {
     this.setState({ searchfield: event.target.value });
-  };
-
-  onError = () => {
-    this.setState({
-      error: true,
-      isLoaded: true
-    });
   };
 
   addItem = (newItem) => {
@@ -115,17 +113,14 @@ class App extends Component {
     ];
 
     return (
-      <div className="center">
-        <h1 className="tc f1 lh-title">Frontend-Javascript Test</h1>
-        <div className="flex justify-center">
-          <button 
-            className="bg-white ba ph3 pv2 dib br3 b--green"
-            onClick={this.onUrlChange}>{buttonText}</button>
-         
-          <SearchBox searchChange={this.onSearchChange} />
-        </div>
+      <div className="tc center">
+        <h1 className="f1 lh-title">Frontend-Javascript-Test</h1>
+        <button 
+          className="w-30 bg-white ba ph3 pv2 dib br3 b--green"
+          onClick={this.onUrlChange}>{buttonText}</button>
+
        
-        {!isLoaded &&
+        {!isLoaded && 
           <Spinner />
         }
 
@@ -133,11 +128,12 @@ class App extends Component {
           <ErrorIndicator />
         }
 
-        {isLoaded && 
-          <>
+        {isLoaded && !error && 
+          <div className="tc center">
+            <SearchBox searchChange={this.onSearchChange} />
             <Form addItem={this.addItem} />
             <Table columns={columns} data={data} />
-          </>
+          </div>
         }
       </div>
     );

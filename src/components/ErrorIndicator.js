@@ -2,9 +2,11 @@ import React from 'react';
 
 const ErrorIndicator = () => {
     return (
-        <div>
-            <span className="f1 lh-title">Уууупс!</span>
-            <span className="f3 lh-copy">что-то пошло не так</span>
+        <div className="tc center mt3 bg-light-green red">
+            <span className="f1 lh-title">Упс!</span>
+            <br/>
+            <span className="f3 lh-copy">что-то не так с загрузкой с сервера</span>
+            <br/>
             <span className="f3 lh-copy">но мы уже работаем, чтобы это исправить</span>
         </div>
     );

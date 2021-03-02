@@ -57,12 +57,12 @@ export default class Form extends Component {
           поле id - хотя бы одна цифра, которая никак не проверяется на уникальность
           текстовые поля считаются заполненными при вводе хотя бы одной буквы,
           поле Email - на соответствие шаблону
-          поле Phone - при вводе 7-й цифры */
+          поле Phone - при вводе 10-й цифры */
 
-      if (value) {  // проверка нужна когда мы BackSpace удаляем последний из введенных символов
+      if (value) {  // проверка: нужна когда мы BackSpace удаляем последний из введенных символов
       
       if (this.checkInput(name, value)) {
-        if (name !== 'email' && name !== 'phone') {
+        if (name !== 'email' && name !== 'phone') { // блок проверок и фиксации состояния заполненности для полей: id, firstName, lastName
           this.setState({
                           [name]: value,
                           isCompleted: {
@@ -71,7 +71,7 @@ export default class Form extends Component {
                                         }                          
                         });
         }
-        else if (name === 'email') {
+        else if (name === 'email') {    // блок проверок и фиксации состояния заполненности для поля Email
           let emailRegexp = /^[a-z0-9][a-z0-9\.-_]*[a-z0-9]@[a-z0-9][a-z0-9_-]*[a-z0-9]+\.[a-z0-9][a-z0-9_-]*[a-z0-9]+$/i;
           if (value.match(emailRegexp)) {
             this.setState({
@@ -88,8 +88,8 @@ export default class Form extends Component {
             });
           }
         }
-        else if (name === 'phone') {
-          let phoneRegexp = /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/;
+        else if (name === 'phone') { // блок проверок и фиксации состояния заполненности для поля Phone
+          let phoneRegexp = /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{10,}$/;
           if (value.match(phoneRegexp)) {
             this.setState({
               [name]: value,
@@ -107,14 +107,14 @@ export default class Form extends Component {
         }        
       }
     }
-    else {
+    else { // обнуление поля при затирке последнего из введенных символов клавишей Back Space
       this.setState({
         [name]: ''              
       });
     }
     }
 
-    isFormCompleted(){
+    isFormCompleted(){ 
       let flag = true;
       for (let value of Object.values(this.state.isCompleted)) {
         if (value === false) {
@@ -132,7 +132,7 @@ export default class Form extends Component {
             firstName: this.state.firstName,
             lastName: this.state.lastName,
             email: this.state.email,
-            phone: this.state.phone   
+            phone: '(' + this.state.phone.slice(0,3) + ')' + this.state.phone.slice(3,6) + '-' + this.state.phone.slice(6,)   
         };
  
         this.props.addItem(newItem);
@@ -162,7 +162,7 @@ export default class Form extends Component {
       return (
         <div className="tc flex justify-center">
           {!isPressed 
-          ? <button className="mv3 bg-white ba ph3 pa3 dib br3 b--green" onClick = {() => this.setState({isPressed: true})}>Добавить новую строку в таблицу</button> 
+          ? <button className="mv2 w-30 bg-white ba ph2 pa2 dib br3 b--green" onClick = {() => this.setState({isPressed: true})}>Добавить новую строку в таблицу</button> 
           : <div className="ph4 overflow-auto ">
               <div className="f6 w-100 mw8 center" cellSpacing="0">
                   <form className="tl flex pa3">
